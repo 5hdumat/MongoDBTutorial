@@ -31,7 +31,7 @@ const addSum = (a, b) => new Promise((resolve, reject) => {
 
 const totalSum = async () => {
     try {
-        let sum = await addSum(10, 012)
+        let sum = await addSum(10, 12)
         let sum2 = await addSum(sum, 10)
         let sum3 = await addSum(sum2, 10)
 
