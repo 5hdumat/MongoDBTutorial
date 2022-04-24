@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const blogRouter = Router();
-const { Blog, User } = require("../models");
+const { Blog, User, Comment } = require("../models");
 const { isValidObjectId } = require("mongoose");
 const { userRouter } = require("./userRoute");
 const { default: mongoose } = require("mongoose");
@@ -45,11 +45,12 @@ blogRouter.post("/", async (req, res) => {
 
 blogRouter.get("/", async (req, res) => {
     try {
-        const blogs = await Blog.find({});
-        // .populate([
-        //     { path: "user" },
-        //     { path: "comments", populate: [{ path: "user" }] },
-        // ]);
+        let { page } = req.query;
+        page = parseInt(page);
+        const blogs = await Blog.find({})
+            .skip(page * 3)
+            .limit(10)
+            .sort({ updatedAt: -1 });
 
         return res.send({ blogs });
     } catch (err) {
@@ -72,7 +73,12 @@ blogRouter.get("/:blogId", async (req, res) => {
             return res.status(404).send({ err: "blog does not exist." });
         }
 
-        return res.send({ blog });
+        // Compute 작업으로 불필요해져서 주석
+        // const commentCount = await Comment.find({
+        //     blog: blogId,
+        // }).countDocuments();
+
+        return res.send({ blog, commentCount });
     } catch (err) {
         console.log(err);
         return res.status(500).send({ err: err.message });

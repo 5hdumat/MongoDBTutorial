@@ -9,7 +9,7 @@ const MONGO_URI =
 const server = async () => {
     try {
         let mongodbConnection = await mongoose.connect(MONGO_URI);
-        mongoose.set("debug", true);
+        // mongoose.set("debug", true);
 
         console.log("mongodb connect.");
 
@@ -22,9 +22,9 @@ const server = async () => {
         app.listen("3000", async () => {
             console.log("server listening on port 3000");
 
-            // for (let i = 1; i < 20; i++) {
-            //     await generateFakeData(3, 5, 20);
-            // }
+            // console.time();
+            await generateFakeData(10, 2, 10);
+            // console.timeEnd();
         });
     } catch (err) {
         console.log(err);
